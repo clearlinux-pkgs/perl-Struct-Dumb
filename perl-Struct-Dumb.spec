@@ -4,17 +4,15 @@
 #
 Name     : perl-Struct-Dumb
 Version  : 0.09
-Release  : 1
+Release  : 2
 URL      : https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Struct-Dumb-0.09.tar.gz
 Source0  : https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Struct-Dumb-0.09.tar.gz
 Source1  : http://http.debian.net/debian/pool/main/libs/libstruct-dumb-perl/libstruct-dumb-perl_0.09-1.debian.tar.xz
 Summary  : 'make simple lightweight record-like structures'
 Group    : Development/Tools
 License  : Artistic-1.0 Artistic-1.0-Perl GPL-1.0
-Requires: perl-Struct-Dumb-license
-Requires: perl-Struct-Dumb-man
-Requires: perl(Test::Fatal)
-Requires: perl(Try::Tiny)
+Requires: perl-Struct-Dumb-license = %{version}-%{release}
+BuildRequires : buildreq-cpan
 BuildRequires : perl(Test::Fatal)
 BuildRequires : perl(Try::Tiny)
 
@@ -33,6 +31,15 @@ printf "Point is at (%d, %d)\n", $point->x, $point->y;
 $point->y = 30;
 printf "Point is now at (%d, %d)\n", $point->x, $point->y;
 
+%package dev
+Summary: dev components for the perl-Struct-Dumb package.
+Group: Development
+Provides: perl-Struct-Dumb-devel = %{version}-%{release}
+
+%description dev
+dev components for the perl-Struct-Dumb package.
+
+
 %package license
 Summary: license components for the perl-Struct-Dumb package.
 Group: Default
@@ -41,19 +48,11 @@ Group: Default
 license components for the perl-Struct-Dumb package.
 
 
-%package man
-Summary: man components for the perl-Struct-Dumb package.
-Group: Default
-
-%description man
-man components for the perl-Struct-Dumb package.
-
-
 %prep
-tar -xf %{SOURCE1}
-cd ..
 %setup -q -n Struct-Dumb-0.09
-mkdir -p %{_topdir}/BUILD/Struct-Dumb-0.09/deblicense/
+cd ..
+%setup -q -T -D -n Struct-Dumb-0.09 -b 1
+mkdir -p deblicense/
 mv %{_topdir}/BUILD/debian/* %{_topdir}/BUILD/Struct-Dumb-0.09/deblicense/
 
 %build
@@ -78,12 +77,12 @@ make TEST_VERBOSE=1 test
 
 %install
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/perl-Struct-Dumb
-cp LICENSE %{buildroot}/usr/share/doc/perl-Struct-Dumb/LICENSE
+mkdir -p %{buildroot}/usr/share/package-licenses/perl-Struct-Dumb
+cp LICENSE %{buildroot}/usr/share/package-licenses/perl-Struct-Dumb/LICENSE
 if test -f Makefile.PL; then
-make pure_install PERL_INSTALL_ROOT=%{buildroot}
+make pure_install PERL_INSTALL_ROOT=%{buildroot} INSTALLDIRS=vendor
 else
-./Build install --installdirs=site --destdir=%{buildroot}
+./Build install --installdirs=vendor --destdir=%{buildroot}
 fi
 find %{buildroot} -type f -name .packlist -exec rm -f {} ';'
 find %{buildroot} -depth -type d -exec rmdir {} 2>/dev/null ';'
@@ -92,12 +91,12 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 
 %files
 %defattr(-,root,root,-)
-/usr/lib/perl5/site_perl/5.26.1/Struct/Dumb.pm
+/usr/lib/perl5/vendor_perl/5.26.1/Struct/Dumb.pm
 
-%files license
-%defattr(-,root,root,-)
-/usr/share/doc/perl-Struct-Dumb/LICENSE
-
-%files man
+%files dev
 %defattr(-,root,root,-)
 /usr/share/man/man3/Struct::Dumb.3
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/perl-Struct-Dumb/LICENSE
