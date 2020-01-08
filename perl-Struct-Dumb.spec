@@ -4,7 +4,7 @@
 #
 Name     : perl-Struct-Dumb
 Version  : 0.09
-Release  : 10
+Release  : 11
 URL      : https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Struct-Dumb-0.09.tar.gz
 Source0  : https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Struct-Dumb-0.09.tar.gz
 Source1  : http://http.debian.net/debian/pool/main/libs/libstruct-dumb-perl/libstruct-dumb-perl_0.09-1.debian.tar.xz
@@ -12,6 +12,7 @@ Summary  : 'make simple lightweight record-like structures'
 Group    : Development/Tools
 License  : Artistic-1.0 Artistic-1.0-Perl GPL-1.0
 Requires: perl-Struct-Dumb-license = %{version}-%{release}
+Requires: perl-Struct-Dumb-perl = %{version}-%{release}
 BuildRequires : buildreq-cpan
 BuildRequires : perl(Test::Fatal)
 BuildRequires : perl(Try::Tiny)
@@ -35,6 +36,7 @@ printf "Point is now at (%d, %d)\n", $point->x, $point->y;
 Summary: dev components for the perl-Struct-Dumb package.
 Group: Development
 Provides: perl-Struct-Dumb-devel = %{version}-%{release}
+Requires: perl-Struct-Dumb = %{version}-%{release}
 
 %description dev
 dev components for the perl-Struct-Dumb package.
@@ -48,18 +50,28 @@ Group: Default
 license components for the perl-Struct-Dumb package.
 
 
+%package perl
+Summary: perl components for the perl-Struct-Dumb package.
+Group: Default
+Requires: perl-Struct-Dumb = %{version}-%{release}
+
+%description perl
+perl components for the perl-Struct-Dumb package.
+
+
 %prep
 %setup -q -n Struct-Dumb-0.09
-cd ..
-%setup -q -T -D -n Struct-Dumb-0.09 -b 1
+cd %{_builddir}
+tar xf %{_sourcedir}/libstruct-dumb-perl_0.09-1.debian.tar.xz
+cd %{_builddir}/Struct-Dumb-0.09
 mkdir -p deblicense/
-mv %{_topdir}/BUILD/debian/* %{_topdir}/BUILD/Struct-Dumb-0.09/deblicense/
+cp -r %{_builddir}/debian/* %{_builddir}/Struct-Dumb-0.09/deblicense/
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
+export LANG=C.UTF-8
 if test -f Makefile.PL; then
 %{__perl} Makefile.PL
 make  %{?_smp_mflags}
@@ -69,7 +81,7 @@ else
 fi
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
@@ -78,7 +90,7 @@ make TEST_VERBOSE=1 test
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/perl-Struct-Dumb
-cp LICENSE %{buildroot}/usr/share/package-licenses/perl-Struct-Dumb/LICENSE
+cp %{_builddir}/Struct-Dumb-0.09/LICENSE %{buildroot}/usr/share/package-licenses/perl-Struct-Dumb/6022b36df1c8b82fb9dfb3dc0d790a4f0c778463
 if test -f Makefile.PL; then
 make pure_install PERL_INSTALL_ROOT=%{buildroot} INSTALLDIRS=vendor
 else
@@ -91,7 +103,6 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 
 %files
 %defattr(-,root,root,-)
-/usr/lib/perl5/vendor_perl/5.28.2/Struct/Dumb.pm
 
 %files dev
 %defattr(-,root,root,-)
@@ -99,4 +110,8 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/perl-Struct-Dumb/LICENSE
+/usr/share/package-licenses/perl-Struct-Dumb/6022b36df1c8b82fb9dfb3dc0d790a4f0c778463
+
+%files perl
+%defattr(-,root,root,-)
+/usr/lib/perl5/vendor_perl/5.30.1/Struct/Dumb.pm
