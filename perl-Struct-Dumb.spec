@@ -4,7 +4,7 @@
 #
 Name     : perl-Struct-Dumb
 Version  : 0.12
-Release  : 15
+Release  : 16
 URL      : https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Struct-Dumb-0.12.tar.gz
 Source0  : https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Struct-Dumb-0.12.tar.gz
 Source1  : http://http.debian.net/debian/pool/main/libs/libstruct-dumb-perl/libstruct-dumb-perl_0.09-1.debian.tar.xz
@@ -106,4 +106,4 @@ find %{buildroot} -type f -name '*.bs' -empty -exec rm -f {} ';'
 
 %files perl
 %defattr(-,root,root,-)
-/usr/lib/perl5/vendor_perl/5.30.3/Struct/Dumb.pm
+/usr/lib/perl5/vendor_perl/5.32.1/Struct/Dumb.pm
