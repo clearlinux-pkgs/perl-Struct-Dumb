@@ -4,7 +4,7 @@
 #
 Name     : perl-Struct-Dumb
 Version  : 0.14
-Release  : 32
+Release  : 33
 URL      : https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Struct-Dumb-0.14.tar.gz
 Source0  : https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Struct-Dumb-0.14.tar.gz
 Source1  : http://http.debian.net/debian/pool/main/libs/libstruct-dumb-perl/libstruct-dumb-perl_0.09-1.debian.tar.xz
